@@ -1,13 +1,18 @@
 import { Button, Table } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import styled from "styled-components";
 import useSWR from "swr";
 
 import MainLayout from "../layouts/MainLayout";
 import fetcher from "../libs/fetcher";
+import deleteSurvey from "../services/deleteSurvey";
 
 function ListPage() {
-    const { data = [], error } = useSWR("/surveys", fetcher);
+    const { data = [], error } = useSWR(
+        "/surveys?_sort=id&_order=desc",
+        fetcher
+    );
     const navigation = useNavigate();
     const [page, setPage] = useState(1);
     console.log("data", data);
@@ -40,9 +45,12 @@ function ListPage() {
             render: (id) => {
                 return (
                     <Button
-                        type="primary"
-                        onClick={() => {
+                        danger
+                        onClick={(e) => {
                             console.log(id, "삭제");
+                            deleteSurvey(id);
+                            e.stopPropagation();
+                            e.preventDefault();
                         }}
                     >
                         삭제
@@ -62,6 +70,11 @@ function ListPage() {
 
     return (
         <MainLayout selectedKeys={["list"]}>
+            <CreteBUttonWrapper>
+                <Button onClick={() => navigation(`/builder`)}>
+                    새로운 설문조사 생성
+                </Button>
+            </CreteBUttonWrapper>
             <Table
                 onRow={(record, rowIndex) => {
                     return {
@@ -87,4 +100,9 @@ function ListPage() {
         </MainLayout>
     );
 }
+
+const CreteBUttonWrapper = styled.div`
+    text-align: right;
+    margin: 20px 0;
+`;
 export default ListPage;

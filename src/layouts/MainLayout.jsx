@@ -3,22 +3,17 @@ import { useMemo } from "react";
 import { Link } from "react-router";
 import styled from "styled-components";
 const { Header, Content, Sider } = Layout;
-function MainLayout({ selectedKeys, children }) {
+function MainLayout({ selectedKeys, children, padding = 45 }) {
     const items = [
         {
             key: "list",
             label: <Link to="/list">설문조사관리</Link>,
         },
-        // 필요하면 추가
-        // {
-        //     key: "builder",
-        //     label: <Link to="/builder">빌더</Link>,
-        // }
     ];
 
     const contentStyle = useMemo(() => {
         return {
-            padding: 45,
+            padding,
         };
     }, []);
 
